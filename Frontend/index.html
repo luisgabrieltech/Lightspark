@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard LightSpark</title>
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+  
+    header {
+      background-color: #1e88e5;
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+  
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+  
+    main {
+      padding: 2rem;
+    }
+  
+    /* Estilo do formulário */
+    .form-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+  
+    .form-container h2 {
+      margin-bottom: 1rem;
+      color: #1e88e5;
+      font-size: 1.6rem;
+    }
+  
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+  
+    .input-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #666;
+    }
+  
+    .input-group input {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+  
+    .input-group input:focus {
+      border-color: #1e88e5;
+      outline: none;
+    }
+  
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.2rem;
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  
+    .submit-btn:hover {
+      background-color: #1565c0;
+    }
+  
+    /* Estilos da tabela */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+  
+    th {
+      background-color: #e3f2fd;
+      font-weight: bold;
+    }
+  
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  
+    tr:hover {
+      background-color: #e1f5fe;
+    }
+  
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+  
+</head>
+<body>
+  <header>
+    <h1>Dashboard de Campanhas - LightSpark</h1>
+  </header>
+  <!-- Formulário de Nova Campanha -->
+<h2>Nova Campanha</h2>
+<form id="form-campanha" class="form-container">
+  <div class="input-group">
+    <label for="cliente">Cliente</label>
+    <input type="text" name="cliente" id="cliente" placeholder="Cliente" required />
+  </div>
+  
+  <div class="input-group">
+    <label for="cliques">Cliques</label>
+    <input type="number" name="cliques" id="cliques" placeholder="Cliques" required />
+  </div>
+
+  <div class="input-group">
+    <label for="impressoes">Visualizações</label>
+    <input type="number" name="impressoes" id="impressoes" placeholder="Visualizações" required />
+  </div>
+
+  <div class="input-group">
+    <label for="engagement">Engajamento</label>
+    <input type="number" name="engagement" id="engagement" step="0.01" placeholder="Engajamento (ex: 0.23)" required />
+  </div>
+
+  <div class="input-group">
+    <label for="previsao_roi">Previsão ROI</label>
+    <input type="number" name="previsao_roi" id="previsao_roi" step="0.01" placeholder="Previsão ROI" required />
+  </div>
+
+  <button type="submit" class="submit-btn">Enviar</button>
+</form>
+
+  
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Cliques</th>
+          <th>Visualizações</th>
+          <th>Engajamento</th>
+          <th>Previsão de ROI</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-campanhas"></tbody>
+    </table>
+  </main>
+
+  <div class="footer">© 2025 LightSpark Marketing Digital</div>
+
+  <script>
+    fetch('http://localhost:3000/api/campanhas')
+      .then(res => res.json())
+      .then(dados => {
+        const tabela = document.getElementById('tabela-campanhas');
+        tabela.innerHTML = dados.map(c => `
+          <tr>
+            <td>${c.cliente}</td>
+            <td>${c.cliques}</td>
+            <td>${c.impressoes}</td>
+            <td>${(c.engagement * 100).toFixed(1)}%</td>
+            <td>${c.previsao_roi.toFixed(2)}</td>
+          </tr>
+        `).join('');
+      });
+  </script>
+</body>
+
+<script>
+    const tabela = document.getElementById('tabela-campanhas');
+  
+    function carregarTabela() {
+      fetch('http://localhost:3000/api/campanhas')
+        .then(res => res.json())
+        .then(dados => {
+          tabela.innerHTML = dados.map(c => `
+            <tr>
+              <td>${c.cliente}</td>
+              <td>${c.cliques}</td>
+              <td>${c.impressoes}</td>
+              <td>${(c.engagement * 100).toFixed(1)}%</td>
+              <td>${c.previsao_roi.toFixed(2)}</td>
+            </tr>
+          `).join('');
+        });
+    }
+  
+    carregarTabela(); // ao carregar a página
+  
+    document.getElementById('form-campanha').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(e.target));
+      dados.engagement = parseFloat(dados.engagement);
+      dados.previsao_roi = parseFloat(dados.previsao_roi);
+  
+      await fetch('http://localhost:3000/api/campanhas', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dados)
+      });
+  
+      e.target.reset();
+      carregarTabela(); // atualiza
+    });
+  </script>
+
+
+</html>
