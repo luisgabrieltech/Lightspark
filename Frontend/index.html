@@ -125,7 +125,6 @@
     <h1>Dashboard de Campanhas - LightSpark</h1>
   </header>
   <!-- Formulário de Nova Campanha -->
-<h2>Nova Campanha</h2>
 <form id="form-campanha" class="form-container">
   <div class="input-group">
     <label for="cliente">Cliente</label>
@@ -174,7 +173,12 @@
   <div class="footer">© 2025 LightSpark Marketing Digital</div>
 
   <script>
-    fetch('http://localhost:3000/api/campanhas')
+    // URL da API - ajustável conforme ambiente
+    const API_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3000/api/campanhas' 
+      : 'http://backend:3000/api/campanhas';
+      
+    fetch(API_URL)
       .then(res => res.json())
       .then(dados => {
         const tabela = document.getElementById('tabela-campanhas');
@@ -195,7 +199,12 @@
     const tabela = document.getElementById('tabela-campanhas');
   
     function carregarTabela() {
-      fetch('http://localhost:3000/api/campanhas')
+      // URL da API - ajustável conforme ambiente
+      const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api/campanhas' 
+        : 'http://backend:3000/api/campanhas';
+      
+      fetch(API_URL)
         .then(res => res.json())
         .then(dados => {
           tabela.innerHTML = dados.map(c => `
@@ -218,7 +227,12 @@
       dados.engagement = parseFloat(dados.engagement);
       dados.previsao_roi = parseFloat(dados.previsao_roi);
   
-      await fetch('http://localhost:3000/api/campanhas', {
+      // URL da API - ajustável conforme ambiente
+      const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api/campanhas' 
+        : 'http://backend:3000/api/campanhas';
+        
+      await fetch(API_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(dados)

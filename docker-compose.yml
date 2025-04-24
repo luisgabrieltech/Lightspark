@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  backend:
+    build: ./Backend
+    container_name: lightspark-backend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  frontend:
+    build: ./Frontend
+    container_name: lightspark-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    volumes:
+      - ./Frontend:/usr/share/nginx/html
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  default:
+    name: lightspark-network
