@@ -64,5 +64,3 @@ jobs:
     steps:
       - name: Deploy to production
         run: echo "Deploy step - configure para seu ambiente específico"
-        # Aqui você pode adicionar comandos para implantar em seu servidor
-        # Por exemplo: ssh, scp, ou chamadas para serviços de nuvem como AWS, Azure, etc. 
